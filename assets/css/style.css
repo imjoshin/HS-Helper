@@ -2,6 +2,9 @@
     font-family: hs;
     src: url("fonts/bliz-quadrata.woff") format('woff');
 }
+html {
+  height: 120px;
+}
 body {
   padding: 0;
   margin: 0;
@@ -16,11 +19,12 @@ h1 {
 
 #header {
   padding: 20px;
-  margin-bottom: 20px;
   background-color: #000;
   color: #fff;
 }
 #content {
+  display: none;
+  background-image: url("../img/bg.jpg");
 }
 #card {
   display: none;

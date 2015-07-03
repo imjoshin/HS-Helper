@@ -17,9 +17,18 @@ $(document).ready(function(){
     });
 
     console.log(url);
-    $("#card").slideUp(500);
+    $("html").css("height", "auto");
+    $("#content").slideDown(300, function(){
+      $("#card").slideUp(500, function(){
+        $("#card").css("background-image", "url(" + url + ")");
+      });
+      showData();
+    });
+  });
+
+  function showData(){
+
     $("#info").slideUp(500, function(){
-      $("#card").css("background-image", "url(" + url + ")");
 
       var chars = [" ", "!", ".", "'", ":"];
       var charReplace = ["_", "", "", "", ""];
@@ -46,11 +55,7 @@ $(document).ready(function(){
         $("#info").slideDown(500);
       });
     }); 
-
-
-
-
-  });
+  }
 
   function processKey(k){
     if(k == "id") return "ID";
@@ -64,4 +69,11 @@ $(document).ready(function(){
     }
     return replaceString;
   };
+
+
+  $("#query").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#search").click();
+    }
+  });
 });
