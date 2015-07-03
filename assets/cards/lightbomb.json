@@ -1,0 +1,1 @@
+{"id":"GVG_008","name":"Lightbomb","type":"Spell","rarity":"Epic","cost":6,"text":"Deal damage to each minion equal to its Attack.","flavor":"This is what happens when you allow goblins to be priests.","artist":"Luca Zontini","collectible":true,"playerClass":"Priest","mechanics":["AffectedBySpellPower"]}

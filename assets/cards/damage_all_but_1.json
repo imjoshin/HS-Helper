@@ -1,0 +1,1 @@
+{"id":"XXX_020","name":"Damage all but 1","type":"Spell","rarity":"Common","cost":0,"text":"Set the Health of a character to 1.","mechanics":["ImmuneToSpellpower"]}

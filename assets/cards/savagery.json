@@ -1,0 +1,1 @@
+{"id":"EX1_578","name":"Savagery","type":"Spell","faction":"Neutral","rarity":"Rare","cost":1,"text":"Deal damage equal to your hero's Attack to a minion.","flavor":"It is true that some druids are savage, but others still enjoy a quiet moment and a spot of tea.","artist":"Dave Rapoza","collectible":true,"playerClass":"Druid","mechanics":["AffectedBySpellPower"]}

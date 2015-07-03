@@ -1,0 +1,1 @@
+{"id":"CS2_026","name":"Frost Nova","type":"Spell","faction":"Neutral","rarity":"Common","cost":3,"text":"<b>Freeze<\/b> all enemy minions.","flavor":"Hey man, that's cold.  Literally and metaphorically.","artist":"Josh Tallman","collectible":true,"playerClass":"Mage","howToGet":"Unlocked at Level 6.","howToGetGold":"Unlocked at Level 23.","mechanics":["Freeze"]}

@@ -1,0 +1,1 @@
+{"id":"EX1_303","name":"Shadowflame","type":"Spell","faction":"Neutral","rarity":"Rare","cost":4,"text":"Destroy a friendly minion and deal its Attack damage to all enemy minions.","flavor":"Start with a powerful minion and stir in Shadowflame and you have a good time!","artist":"Dave Kendall","collectible":true,"playerClass":"Warlock","mechanics":["AffectedBySpellPower"]}

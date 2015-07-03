@@ -1,0 +1,1 @@
+{"id":"TB_008","name":"Rotten Banana","type":"Spell","cost":1,"text":"Deal $1 damage.","collectible":false,"mechanics":["AffectedBySpellPower"]}

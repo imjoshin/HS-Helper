@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+ 
+  "name": "HS-Helper",
+  "description": "This extension will search for cards in Hearthstone and show their details.",
+  "version": "1.0",
+  
+  "browser_action": {
+    "default_icon": "assets/img/icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [ "http://*/*", "https://*/*"],
+      "js": ["assets/js/jquery.min.js", "assets/js/popup.js"]
+    }
+  ]
+}
