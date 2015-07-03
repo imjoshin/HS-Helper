@@ -24,19 +24,26 @@
 
       if(isset($images[$j]->attr['data-imageurl'])){
         $normal = $images[$j]->attr['data-imageurl'];
-
         $img = "$saveFolder/$title." . substr($normal, -3);
-        //file_put_contents($img, file_get_contents($url));
+
+        download($normal, $img);
         echo "<i>$normal</i> -> <b>$img</b><br/>";
       }
       if(isset($images[$j]->attr['data-gifurl'])){
         $gold = $images[$j]->attr['data-gifurl'];
-
         $img = "$saveFolder/$title-g.gif";
-        //file_put_contents($img, file_get_contents($url));
+
+        download($gold, $img);
         echo "<i>$gold</i> -> <b>$img</b><br/>";
       }
     }
   }
   echo "<b>Complete!</b>";
+
+function download($url, $location){
+  $content = file_get_contents($url);
+  $fp = fopen($location, "w");
+  fwrite($fp, $content);
+  fclose($fp);
+}
 ?>
