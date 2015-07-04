@@ -75,8 +75,10 @@
     $ret = array();
 
     foreach($order as $o){
-      if(isset($json[$o]))
+      if(isset($json[$o])){
+        if($o == "text") $json[$o] = str_replace("$", "", $json[$o]);
         $ret[$o] = $json[$o];
+      }
     }
     return $ret;
   }

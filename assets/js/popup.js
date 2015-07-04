@@ -15,35 +15,34 @@ $(document).ready(function(){
 
 
   function showData(file){
+    $("#content").slideDown(300, function(){
+      $("#info").slideUp(300);
+      $("#card").slideUp(300, function(){
 
-    $("#info").slideUp(300);
-    $("#card").slideUp(300, function(){
+        $("#info").html("");
+        $.ajax({
+          url: 'http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json',
+          type: 'GET',
+          success: function(){
+            $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json', function(data) {         
+              
+              $("#card").css("background-image", "url(" + (($("#golden").is(':checked')) ? data["gold"] : data["normal"]) + ")");
+              $("#card").data("normal", data["normal"]);
+              $("#card").data("gold", data["gold"]);
 
-      $("#info").html("");
-      $.ajax({
-        url: 'http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json',
-        type: 'GET',
-        success: function(){
-          $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json', function(data) {         
-            
-            $("#card").css("background-image", "url(" + (($("#golden").is(':checked')) ? data["gold"] : data["normal"]) + ")");
-            $("#card").data("normal", data["normal"]);
-            $("#card").data("gold", data["gold"]);
+              for(var k in data){
+                if(k == "normal" || k == "gold") continue;
+                $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
+              }
+            });
 
-            for(var k in data){
-              if(k == "normal" || k == "gold") continue;
-              $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
-            }
-          });
-
-          $("#card").slideDown(300, function(){
-            $("#info").slideDown(300);
-          });
-        }
-        
+            $("#card").slideDown(300, function(){
+              $("#info").slideDown(300);
+            });
+          }
+          
+        });
       });
-
-      
     }); 
   }
 
@@ -58,11 +57,11 @@ $(document).ready(function(){
   }
 
   String.prototype.replaceArray = function(find, replace) {
-    var replaceString = this;
+    var str = this;
     for (var i = 0; i < find.length; i++) {
-      replaceString = replaceString.replace(find[i], replace[i]);
+      str = str.replace(new RegExp('\\b'+find[i]+'\\b', 'g'), replace[i]);
     }
-    return replaceString;
+    return str;
   };
   function isValidImage(url) {
     var ret = true;
@@ -71,12 +70,7 @@ $(document).ready(function(){
   }
 
   $(document).on("click", ".suggestion", function(){
-    var t = this;
-    $("#autocomp").slideUp(300, function(){
-      $("#content").slideDown(300, function(){
-        showData($(t).data('id'));
-      });
-    });
+    showData($(this).data('id'));
   });
 
   $("#golden").on("change", function(){
@@ -85,12 +79,18 @@ $(document).ready(function(){
   });
 
   $("#query").keyup(function(event){
+    if(event.which == 13) {
+        if($("#autocomp").length > 0)
+          showData($("#autocomp").find(".suggestion").data("id"));
+        return;
+    }
     if (timer) {
         $("#autocomp").slideUp(300);
         clearTimeout(timer);
     }
     timer = setTimeout(search, 500);
   });
+
   function search(){
     var text = $.trim($("#query").val().toLowerCase());
     if(text.length <= 2) return;
