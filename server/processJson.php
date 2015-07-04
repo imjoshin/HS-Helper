@@ -20,8 +20,8 @@
       $card = json_decode(json_encode($card), true);
       
       if(is_array($card) && array_key_exists("name", $card) && $card["type"] != "Hero"){
-        $filename = str_replace($char, $charReplace, $card["name"]);
-        $all[strtolower($card["name"])] = $filename;
+        $filename = strtolower(str_replace($char, $charReplace, $card["name"]));
+        $all[$card["name"]] = $filename;
         $card["set"] = $sName;
         echo "Created cards/$filename.json<br/>";
         file_put_contents("cards/$filename.json", json_encode($card));

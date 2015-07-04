@@ -10,26 +10,14 @@ $(document).ready(function(){
     cards = data;
   });
 
-  if(localStorage.getItem('showGolden') == "true") { $("#golden").attr('checked', true); console.log("checked"); }
+  if(localStorage.getItem('showGolden') == "true") $("#golden").attr('checked', true); 
   else $("#golden").attr("checked", false);
 
-  $("#search").on("click", function(){
-    $("html").css("height", "auto");
-    $("#content").slideDown(300, function(){
-      
-    showData();
-    });
-  });
 
-  function showData(){
+  function showData(file){
 
     $("#info").slideUp(300);
     $("#card").slideUp(300, function(){
-
-      file = $("#query").val().toLowerCase();
-      console.log("file before: " + file);
-      file = file.replaceArray(chars, charReplace);
-      console.log("file after: " + file);
 
       $("#info").html("");
       $.ajax({
@@ -44,7 +32,7 @@ $(document).ready(function(){
 
             for(var k in data){
               if(k == "normal" || k == "gold") continue;
-              $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(data[k]) + "'>" + data[k] +"</label><br/>");
+              $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
             }
           });
 
@@ -59,7 +47,8 @@ $(document).ready(function(){
     }); 
   }
 
-  function getClass(v){
+  function getClass(k, v){
+    if(k == "text" || k == "flavor" || k == "id" || k == "collectible" || k == "artist") return "";
     var c = (typeof v == "string") ? v.replaceArray(chars, charReplace) : "";
     return c.toLowerCase();
   }
@@ -80,6 +69,15 @@ $(document).ready(function(){
     $.ajax({url:url,type:'HEAD' ,async: false, error:function(){ret = false;}});
     return ret;
   }
+
+  $(document).on("click", ".suggestion", function(){
+    var t = this;
+    $("#autocomp").slideUp(300, function(){
+      $("#content").slideDown(300, function(){
+        showData($(t).data('id'));
+      });
+    });
+  });
 
   $("#golden").on("change", function(){
     localStorage.setItem('showGolden', $(this).is(':checked'));
