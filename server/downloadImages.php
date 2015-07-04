@@ -1,6 +1,7 @@
 <?php
   ini_set('display_errors', 'On');
   ini_set('memory_limit', '-1');
+  ini_set('max_execution_time', 0);
   include('simple_html_dom.php');
 
   $url = "http://www.hearthpwn.com/cards?page=";

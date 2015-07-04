@@ -2,7 +2,7 @@ $(document).ready(function(){
   var cards;
 
   $("#search").on("click", function(){
-
+    /*
     var url;
     $.ajax({
       type: 'GET',
@@ -17,11 +17,10 @@ $(document).ready(function(){
     });
 
     console.log(url);
+    */
     $("html").css("height", "auto");
     $("#content").slideDown(300, function(){
-      $("#card").slideUp(500, function(){
-        $("#card").css("background-image", "url(" + url + ")");
-      });
+      
       showData();
     });
   });
@@ -37,6 +36,10 @@ $(document).ready(function(){
       console.log("file before: " + file);
       file = file.replaceArray(chars, charReplace);
       console.log("file after: " + file);
+
+      $("#card").slideUp(500, function(){
+        $("#card").css("background-image", "url(http:/joshjohnson.io/misc/hs-helper/images/" + file + ".png)");
+      });
 
       $("#info").html("");
       $.ajax({
