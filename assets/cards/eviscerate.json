@@ -1,1 +1,0 @@
-{"id":"EX1_124","name":"Eviscerate","type":"Spell","faction":"Neutral","rarity":"Common","cost":2,"text":"Deal $2 damage. <b>Combo:<\/b> Deal $4 damage instead.","flavor":"There is a high cost to Eviscerating your opponent:  It takes a long time to get blood stains out of leather armor.","artist":"Ariel Olivetti","collectible":true,"playerClass":"Rogue","mechanics":["Combo"]}

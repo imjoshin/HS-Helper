@@ -4,19 +4,14 @@
   ini_set('max_execution_time', 0);
   include('simple_html_dom.php');
 
-  $saveFile = true;
 
   $url = "http://www.hearthpwn.com/cards?page=";
-  $saveFolder = "images";
-
-  $char = array(" ", "!", ".", "'", ":");
-  $charReplace = array("_", "", "", "", "");
 
   for($i = 1; $i <= 11; $i+=1){
     $imageDom = file_get_html($url . $i);
     $images = $imageDom->find("td[class=visual-image-cell] a img");
     $titleDom = file_get_html($url . $i);
-    $titles = $titleDom->find("td[class=visual-details-cell] h3 a");
+    $titles = $imageDom->find("td[class=visual-details-cell] h3 a");
     $detailsDom = file_get_html($url . $i);
     $details = $detailsDom->find("td[class=visual-details-cell]");
 
@@ -26,19 +21,6 @@
 
       $title = $titles[$j]->innertext;
       $title = strtolower(str_replace($char, $charReplace, $title));
-
-      $infoDom = str_get_html($details[$j]);
-      $info = $infoDom->find("ul li");
-      $type = "";
-      
-      foreach($info as $in){
-        $d = str_get_html($in);
-        if($type == "" && strpos($in, "Type") !== false){
-          $type = $d->find("a", 0)->innertext;
-        }
-      }
-
-      if($type == "Hero") $title .= "-hero";
 
       if(isset($images[$j]->attr['data-imageurl'])){
         $normal = $images[$j]->attr['data-imageurl'];

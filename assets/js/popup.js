@@ -1,65 +1,68 @@
 $(document).ready(function(){
+  var chars = [" ", "!", ".", "'", ":"];
+  var charReplace = ["_", "", "", "", ""];
+  var imageDir = "http:/joshjohnson.io/misc/hs-helper/images/";
+  var file = "";
+  var timer;
+
   var cards;
+  $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-cards.json', function(data) {         
+    cards = data;
+  });
+
+  if(localStorage.getItem('showGolden') == "true") { $("#golden").attr('checked', true); console.log("checked"); }
+  else $("#golden").attr("checked", false);
 
   $("#search").on("click", function(){
-    /*
-    var url;
-    $.ajax({
-      type: 'GET',
-      url: 'http://joshjohnson.io/misc/hs-helper/getCard.php',
-      async: false,
-      data: {
-        "search": $("#query").val()
-      }, 
-      success: function(output){
-        url = output;
-      }
-    });
-
-    console.log(url);
-    */
     $("html").css("height", "auto");
     $("#content").slideDown(300, function(){
       
-      showData();
+    showData();
     });
   });
 
   function showData(){
 
-    $("#info").slideUp(500, function(){
-
-      var chars = [" ", "!", ".", "'", ":"];
-      var charReplace = ["_", "", "", "", ""];
+    $("#info").slideUp(300);
+    $("#card").slideUp(300, function(){
 
       file = $("#query").val().toLowerCase();
       console.log("file before: " + file);
       file = file.replaceArray(chars, charReplace);
       console.log("file after: " + file);
 
-      $("#card").slideUp(500, function(){
-        $("#card").css("background-image", "url(http:/joshjohnson.io/misc/hs-helper/images/" + file + ".png)");
-      });
-
       $("#info").html("");
       $.ajax({
-        url: 'assets/cards/' + file + '.json',
+        url: 'http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json',
         type: 'GET',
         success: function(){
-          $.getJSON('assets/cards/' + file + '.json', function(data) {         
+          $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json', function(data) {         
+            
+            $("#card").css("background-image", "url(" + (($("#golden").is(':checked')) ? data["gold"] : data["normal"]) + ")");
+            $("#card").data("normal", data["normal"]);
+            $("#card").data("gold", data["gold"]);
+
             for(var k in data){
-              $("#info").append("<b>" + processKey(k) + "</b>: " + data[k] +"<br/>");
+              if(k == "normal" || k == "gold") continue;
+              $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(data[k]) + "'>" + data[k] +"</label><br/>");
             }
           });
+
+          $("#card").slideDown(300, function(){
+            $("#info").slideDown(300);
+          });
         }
+        
       });
 
-      $("#card").slideDown(500, function(){
-        $("#info").slideDown(500);
-      });
+      
     }); 
   }
 
+  function getClass(v){
+    var c = (typeof v == "string") ? v.replaceArray(chars, charReplace) : "";
+    return c.toLowerCase();
+  }
   function processKey(k){
     if(k == "id") return "ID";
     return k.replace( /([a-z])([A-Z])/g, "$1 $2").replace(/^./, function (match) {return match.toUpperCase()});
@@ -72,11 +75,43 @@ $(document).ready(function(){
     }
     return replaceString;
   };
+  function isValidImage(url) {
+    var ret = true;
+    $.ajax({url:url,type:'HEAD' ,async: false, error:function(){ret = false;}});
+    return ret;
+  }
 
+  $("#golden").on("change", function(){
+    localStorage.setItem('showGolden', $(this).is(':checked'));
+    $("#card").css("background-image", "url(" + (($(this).is(':checked')) ? $("#card").data("gold") : $("#card").data("normal")) + ")");
+  });
 
   $("#query").keyup(function(event){
-    if(event.keyCode == 13){
-        $("#search").click();
+    if (timer) {
+        $("#autocomp").slideUp(300);
+        clearTimeout(timer);
     }
+    timer = setTimeout(search, 500);
   });
+  function search(){
+    var text = $.trim($("#query").val().toLowerCase());
+    if(text.length <= 2) return;
+
+    $("#autocomp").empty();
+
+    $.each(cards, function(k, v){
+      if(k.toLowerCase().indexOf(text) >= 0){
+        $("#autocomp").append("<div class='suggestion' data-id='" + v + "'>" + k + "</div>");
+      }
+    });
+
+    if($(".suggestion").length == 0)
+      $("#autocomp").append("<div class='no-results'>No Results</div>");
+    $("#autocomp").slideDown(300);
+  }
+
+  /* Old image function
+  function getImage(base){
+    return base + (($("#golden").is(':checked')) ? (((isValidImage(base + "-g.gif")) ? "-g.gif" : ((isValidImage(base + "-g.png")) ? "-g.png" : ".png"))) : ".png");
+  }*/
 });

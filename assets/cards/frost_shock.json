@@ -1,1 +1,0 @@
-{"id":"CS2_037","name":"Frost Shock","type":"Spell","faction":"Neutral","rarity":"Free","cost":1,"text":"Deal $1 damage to an enemy character and <b>Freeze<\/b> it.","flavor":"FROST SHOCK!","artist":"Alex Horley Orlandelli","collectible":true,"playerClass":"Shaman","howToGet":"Unlocked at Level 1.","howToGetGold":"Unlocked at Level 32.","mechanics":["Freeze"]}
