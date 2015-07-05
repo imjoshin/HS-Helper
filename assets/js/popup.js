@@ -84,11 +84,8 @@ $(document).ready(function(){
           showData($("#autocomp").find(".suggestion").data("id"));
         return;
     }
-    if (timer) {
-        $("#autocomp").slideUp(300);
-        clearTimeout(timer);
-    }
-    timer = setTimeout(search, 500);
+    if($.trim($("#query").val()).length <= 2) $("#autocomp").slideUp(300);
+    else search();
   });
 
   function search(){
