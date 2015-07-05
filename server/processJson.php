@@ -49,7 +49,18 @@
       $title = $titles[$j]->innertext;
       $title = strtolower(str_replace($char, $charReplace, $title));
 
-      if(!file_exists("cards/$title.json")) continue;
+      $infoDom = str_get_html($details[$j]);
+      $info = $infoDom->find("ul li");
+      $type = "";
+      
+      foreach($info as $in){
+        $d = str_get_html($in);
+        if($type == "" && strpos($in, "Type") !== false){
+          $type = $d->find("a", 0)->innertext;
+        }
+      }
+
+      if($type == "Hero" || !file_exists("cards/$title.json")) continue;
 
       $json = json_decode(file_get_contents("cards/$title.json"), true);
       echo "<b>cards/$title.json: </b>";
