@@ -1,15 +1,23 @@
 {
   "manifest_version": 2,
  
-  "name": "HS-Helper",
-  "description": "This extension will search for cards in Hearthstone and show their details.",
-  "version": "1.0",
- 
+  "name": "HS-Helper2",
+  "description": "
+	This extension will search for cards in Hearthstone and show their details.
+	
+	Update log:
+	1.0.1 - Fixed text box display bug for Windows. No longer waits for user to finish typing to search.
+	1.0 - Initial publish.",
+  "version": "1.0.1",
+  
   "browser_action": {
-   "default_icon": "icon.png",
-   "default_popup": "popup.html"
+    "default_icon": "assets/img/icon.png",
+    "default_popup": "popup.html"
   },
-  "permissions": [
-   "activeTab"
-   ]
+  "content_scripts": [
+    {
+      "matches": [ "http://*/*", "https://*/*"],
+      "js": ["assets/js/jquery.min.js", "assets/js/popup.js"]
+    }
+  ]
 }

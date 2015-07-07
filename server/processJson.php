@@ -82,7 +82,7 @@
 
   //re-order json
   function reorder($json){
-    $order = array("name", "type", "rarity", "playerClass", "set", "cost", "attack", "durability", "health", "text", "flavor", "id", "collectible", "mechanics", "artist", "normal", "gold");
+    $order = array("name", "type", "rarity", "playerClass", "set", "cost", "attack", "durability", "health", "text", "flavor", "id", "collectible", "howToGet", "howToGetGold", "mechanics", "artist", "normal", "gold");
     $ret = array();
 
     foreach($order as $o){
