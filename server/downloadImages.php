@@ -16,7 +16,7 @@
     $imageDom = file_get_html($url . $i);
     $images = $imageDom->find("td[class=visual-image-cell] a img");
     $titleDom = file_get_html($url . $i);
-    $titles = $titleDom->find("td[class=visual-details-cell] h3 a");
+    $titles = $imageDom->find("td[class=visual-details-cell] h3 a");
     $detailsDom = file_get_html($url . $i);
     $details = $detailsDom->find("td[class=visual-details-cell]");
 

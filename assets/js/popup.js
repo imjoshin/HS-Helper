@@ -6,11 +6,12 @@ $(document).ready(function(){
   var timer;
 
   var cards;
-  $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-cards.json', function(data) {         
+  $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-cards.json', function(data) {
     cards = data;
+    console.log(cards);
   });
 
-  if(localStorage.getItem('showGolden') == "true") $("#golden").attr('checked', true); 
+  if(localStorage.getItem('showGolden') == "true") $("#golden").attr('checked', true);
   else $("#golden").attr("checked", false);
 
 
@@ -24,8 +25,8 @@ $(document).ready(function(){
           url: 'http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json',
           type: 'GET',
           success: function(){
-            $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json', function(data) {         
-              
+            $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/' + file + '.json', function(data) {
+
               $("#card").css("background-image", "url(" + (($("#golden").is(':checked')) ? data["gold"] : data["normal"]) + ")");
               $("#card").data("normal", data["normal"]);
               $("#card").data("gold", data["gold"]);
@@ -40,10 +41,10 @@ $(document).ready(function(){
               $("#info").slideDown(300);
             });
           }
-          
+
         });
       });
-    }); 
+    });
   }
 
   function getClass(k, v){

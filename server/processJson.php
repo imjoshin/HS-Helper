@@ -23,7 +23,7 @@
         $filename = strtolower(str_replace($char, $charReplace, $card["name"]));
         $all[$card["name"]] = $filename;
         $card["set"] = $sName;
-        echo "Created cards/$filename.json<br/>";
+        echo date('h:i:s') . " - Created cards/$filename.json<br/>";
         file_put_contents("cards/$filename.json", json_encode($card));
       }
     }
@@ -34,7 +34,7 @@
   //get images
   $url = "http://www.hearthpwn.com/cards?page=";
 
-  for($i = 1; $i <= 11; $i+=1){
+  for($i = 1; $i <= 13; $i+=1){
     $imageDom = file_get_html($url . $i);
     $images = $imageDom->find("td[class=visual-image-cell] a img");
     $titleDom = file_get_html($url . $i);
@@ -96,6 +96,6 @@
 
 
   file_put_contents("cards/all-cards.json", json_encode($all));
-  echo "Created cards/all-card.json<br/>";
+  echo date('h:i:s') . " - Created cards/all-card.json<br/>";
   echo "Complete!";
 ?>
