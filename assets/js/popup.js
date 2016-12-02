@@ -1,24 +1,29 @@
 $(document).ready(function(){
   var chars = [" ", "!", ".", "'", ":"];
   var charReplace = ["_", "", "", "", ""];
-  var imageDir = "http:/joshjohnson.io/misc/hs-helper/images/";
   var file = "";
   var timer;
 
   var cards;
-  $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-cards.json', function(data) {
-    cards = data;
-    console.log(cards);
-  });
+  $.ajaxSetup({ cache: false });
 
   if(localStorage.getItem('showGolden') == "true") $("#golden").attr('checked', true);
   else $("#golden").attr("checked", false);
 
+  if(localStorage.getItem('onlyCollectible') == "true") $("#collectible").attr('checked', true);
+  else $("#collectible").attr("checked", false);
 
+  getCards($("#collectible").is(':checked'));
+
+  function getCards(collectible){
+    $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-' + (collectible ? 'collectible-' : "") + 'cards.json', function(data) {
+      cards = data;
+    });
+  }
   function showData(file){
     $("#content").slideDown(300, function(){
-      $("#info").slideUp(300);
-      $("#card").slideUp(300, function(){
+      //$("#info").slideUp(300);
+      $("#card, #info").slideUp(300, function(){
 
         $("#info").html("");
         $.ajax({
@@ -32,14 +37,20 @@ $(document).ready(function(){
               $("#card").data("gold", data["gold"]);
 
               for(var k in data){
-                if(k == "normal" || k == "gold") continue;
+                if(k == "normal" || k == "gold" || k == "playRequirements") continue;
                 $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
+              }
+
+              if(data["normal"] != null){
+                $("#card").slideDown(300, function(){
+                  $("#info").slideDown(300);
+                });
+              }else{
+                $("#card").hide();
+                $("#info").slideDown(300);
               }
             });
 
-            $("#card").slideDown(300, function(){
-              $("#info").slideDown(300);
-            });
           }
 
         });
@@ -79,10 +90,21 @@ $(document).ready(function(){
     $("#card").css("background-image", "url(" + (($(this).is(':checked')) ? $("#card").data("gold") : $("#card").data("normal")) + ")");
   });
 
+  $("#collectible").on("change", function(){
+    localStorage.setItem('onlyCollectible', $(this).is(':checked'));
+    getCards(!$(this).is(':checked'));
+    search();
+  });
+
   $("#query").keyup(function(event){
     if(event.which == 13) {
-        if($("#autocomp").length > 0)
-          showData($("#autocomp").find(".suggestion").data("id"));
+        if($("#autocomp").length > 0){
+          var current = $(".current-suggestion").length > 0 ? parseInt($(".current-suggestion").data("i")) : -1;
+          var next = (current + 1) % $(".suggestion").length;
+          $(".suggestion").eq(current).removeClass("current-suggestion");
+          $(".suggestion").eq(next).addClass("current-suggestion");
+          showData($("#autocomp").find(".current-suggestion").data("id"));
+        }
         return;
     }
     if($.trim($("#query").val()).length <= 2) $("#autocomp").slideUp(300);
@@ -95,9 +117,13 @@ $(document).ready(function(){
 
     $("#autocomp").empty();
 
+    var foundNext = false;
+    var i = 0;
     $.each(cards, function(k, v){
       if(k.toLowerCase().indexOf(text) >= 0){
-        $("#autocomp").append("<div class='suggestion' data-id='" + v + "'>" + k + "</div>");
+        $("#autocomp").append("<div class='suggestion' data-id='" + v + "' data-i='" + i + "'>" + k + "</div>");
+        foundNext = true;
+        i++;
       }
     });
 

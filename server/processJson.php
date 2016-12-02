@@ -8,26 +8,34 @@
   //get full json
   $json = json_decode(file_get_contents("cards.json"));
 
+  $all_collectible = array();
   $all = array();
 
   $char = array(" ", "!", ".", "'", ":");
   $charReplace = array("_", "", "", "", "");
 
   //split json objects into files
-  foreach($json as $sName=>$section){
-    echo "<b>$sName</b><br/>";
-    foreach($section as $card){
-      $card = json_decode(json_encode($card), true);
-      
-      if(is_array($card) && array_key_exists("name", $card) && $card["type"] != "Hero"){
-        $filename = strtolower(str_replace($char, $charReplace, $card["name"]));
-        $all[$card["name"]] = $filename;
-        $card["set"] = $sName;
-        echo date('h:i:s') . " - Created cards/$filename.json<br/>";
-        file_put_contents("cards/$filename.json", json_encode($card));
+  foreach($json as $card){
+    $card = json_decode(json_encode($card), true);
+
+    if(is_array($card) && array_key_exists("name", $card) && $card["type"] != "Hero"){
+      $filename = strtolower(str_replace($char, $charReplace, $card["name"]));
+      $all[$card["name"]] = $filename;
+
+      echo date('h:i:s') . " - Created cards/$filename.json";
+      file_put_contents("cards/$filename.json", json_encode($card));
+
+      if(array_key_exists("collectible", $card) && $card["collectible"] == "true"){
+        $all_collectible[$card["name"]] = $filename;
+      }else{
+        echo "<b style='font-size: 10px'>(uncollectible)</b>";
       }
+
+      echo "<br/>";
     }
+
   }
+
 
   echo "<br/><br/><br/>";
 
@@ -44,7 +52,7 @@
 
     //for($j = 0; $j <= 2; $j+=1){
     for($j = 0; $j <= sizeof($images); $j+=1){
-      if(!isset($titles[$j]->innertext)) continue;      
+      if(!isset($titles[$j]->innertext)) continue;
 
       $title = $titles[$j]->innertext;
       $title = strtolower(str_replace($char, $charReplace, $title));
@@ -52,7 +60,7 @@
       $infoDom = str_get_html($details[$j]);
       $info = $infoDom->find("ul li");
       $type = "";
-      
+
       foreach($info as $in){
         $d = str_get_html($in);
         if($type == "" && strpos($in, "Type") !== false){
@@ -97,5 +105,7 @@
 
   file_put_contents("cards/all-cards.json", json_encode($all));
   echo date('h:i:s') . " - Created cards/all-card.json<br/>";
+  file_put_contents("cards/all-collectible-cards.json", json_encode($all_collectible));
+  echo date('h:i:s') . " - Created cards/all-collectible-cards.json<br/>";
   echo "Complete!";
 ?>
