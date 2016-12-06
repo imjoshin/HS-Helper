@@ -13,16 +13,22 @@ $(document).ready(function(){
   if(localStorage.getItem('onlyCollectible') == "true") $("#collectible").attr('checked', true);
   else $("#collectible").attr("checked", false);
 
-  getCards($("#collectible").is(':checked'));
+  getCards();
 
-  function getCards(collectible){
-    $.getJSON('http://joshjohnson.io/misc/hs-helper/cards/all-' + (collectible ? 'collectible-' : "") + 'cards.json', function(data) {
-      cards = data;
+  function getCards(){
+    $.ajax({
+      url: 'http://joshjohnson.io/misc/hs-helper/cards/all-' + ($("#collectible").is(':checked') ? 'collectible-' : "") + 'cards.json',
+      dataType: 'json',
+      async: false,
+      success: function(data) {
+        cards = data;
+      }
     });
   }
+
   function showData(file){
     $("#content").slideDown(300, function(){
-      //$("#info").slideUp(300);
+
       $("#card, #info").slideUp(300, function(){
 
         $("#info").html("");
@@ -36,9 +42,11 @@ $(document).ready(function(){
               $("#card").data("normal", data["normal"]);
               $("#card").data("gold", data["gold"]);
 
-              for(var k in data){
-                if(k == "normal" || k == "gold" || k == "playRequirements") continue;
-                $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
+              if($("#info").html() == ""){
+                for(var k in data){
+                  if(k == "normal" || k == "gold" || k == "playRequirements") continue;
+                  $("#info").append("<label class='attr'>" + processKey(k) + ":</label> <label class='" + getClass(k, data[k]) + "'>" + data[k] +"</label><br/>");
+                }
               }
 
               if(data["normal"] != null){
@@ -49,10 +57,9 @@ $(document).ready(function(){
                 $("#card").hide();
                 $("#info").slideDown(300);
               }
+
             });
-
           }
-
         });
       });
     });
@@ -63,6 +70,7 @@ $(document).ready(function(){
     var c = (typeof v == "string") ? v.replaceArray(chars, charReplace) : "";
     return c.toLowerCase();
   }
+
   function processKey(k){
     if(k == "id") return "ID";
     return k.replace( /([a-z])([A-Z])/g, "$1 $2").replace(/^./, function (match) {return match.toUpperCase()});
@@ -75,6 +83,7 @@ $(document).ready(function(){
     }
     return str;
   };
+
   function isValidImage(url) {
     var ret = true;
     $.ajax({url:url,type:'HEAD' ,async: false, error:function(){ret = false;}});
@@ -82,6 +91,8 @@ $(document).ready(function(){
   }
 
   $(document).on("click", ".suggestion", function(){
+    $(".suggestion").removeClass("current-suggestion");
+    $(this).addClass("current-suggestion");
     showData($(this).data('id'));
   });
 
@@ -92,7 +103,7 @@ $(document).ready(function(){
 
   $("#collectible").on("change", function(){
     localStorage.setItem('onlyCollectible', $(this).is(':checked'));
-    getCards(!$(this).is(':checked'));
+    getCards();
     search();
   });
 
@@ -131,9 +142,4 @@ $(document).ready(function(){
       $("#autocomp").append("<div class='no-results'>No Results</div>");
     $("#autocomp").slideDown(300);
   }
-
-  /* Old image function
-  function getImage(base){
-    return base + (($("#golden").is(':checked')) ? (((isValidImage(base + "-g.gif")) ? "-g.gif" : ((isValidImage(base + "-g.png")) ? "-g.png" : ".png"))) : ".png");
-  }*/
 });

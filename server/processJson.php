@@ -42,7 +42,7 @@
   //get images
   $url = "http://www.hearthpwn.com/cards?page=";
 
-  for($i = 1; $i <= 13; $i+=1){
+  for($i = 1; $i <= 21; $i+=1){
     $imageDom = file_get_html($url . $i);
     $images = $imageDom->find("td[class=visual-image-cell] a img");
     $titleDom = file_get_html($url . $i);
